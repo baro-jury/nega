@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Enemy : MonoBehaviour
     public float chaseRange = 10.0f;
     public float moveSpeed = 3.0f;
     public Transform player;
+    public Image healthBar;
 
     private bool isAttacking = false;
 
@@ -20,6 +22,11 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = maxHealth;
         player = GameObject.FindWithTag("Player").transform;
+
+        healthBar.type = Image.Type.Filled;
+        healthBar.fillMethod = Image.FillMethod.Horizontal;
+        healthBar.fillOrigin = (int)Image.OriginHorizontal.Right;
+        healthBar.color = Color.red;
     }
 
     void Update()
@@ -60,6 +67,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        healthBar.fillAmount *= damage / maxHealth;
         if (currentHealth <= 0)
         {
             Die();
