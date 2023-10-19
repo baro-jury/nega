@@ -6,20 +6,20 @@ public class SpawnManager : MonoBehaviour
 {
     public GameObject[] enemyPrefab;
     public GameObject[] weaponPrefab;
-    private float spawnRangeX = 20.0f;
-    private float spawnRangeZ = 20.0f;
-    
+    private float spawnRangeX = 15.0f;
+    private float spawnRangeZ = 15.0f;
+
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnEnemy", 2, 5f);
-        InvokeRepeating("SpawnWeapon", 5, 10f);        
+        InvokeRepeating("SpawnEnemy", 2, 10f);
+        InvokeRepeating("SpawnWeapon", 5, 10f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     void SpawnEnemy()
     {
