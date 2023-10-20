@@ -20,6 +20,12 @@ public class PlayerController : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
         rb.AddForce(Vector3.forward * speed * verticalInput);
         rb.AddForce(Vector3.right * speed * horizontalInput);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (CompareTag("MeleeWeapon"))
+        {
 
+        }
     }
 }

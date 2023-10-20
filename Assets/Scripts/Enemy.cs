@@ -4,20 +4,37 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private GameObject player;
-    private Rigidbody enemyrb;
-    public float speed = 3f;
-    // Start is called before the first frame update
+    private Transform player;
+    private Rigidbody enemyRigidbody;
+    public float moveSpeed = 3f;
+    public int maxHealth = 100;
+    public int currentHealth;
+    public int baseAttack = 10;
+
     void Start()
     {
-        enemyrb = GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        enemyRigidbody = GetComponent<Rigidbody>();
+        currentHealth = maxHealth;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector3 lookDirection = (player.transform.position - transform.position).normalized;
-        enemyrb.AddForce(lookDirection*speed);
+        Vector3 playerDirection = (player.position - transform.position).normalized;
+        enemyRigidbody.AddForce(playerDirection * moveSpeed);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
