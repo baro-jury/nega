@@ -1,73 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    private Transform player;
+    private Rigidbody enemyRigidbody;
+    public float moveSpeed = 3f;
     public int maxHealth = 100;
     public int currentHealth;
     public int baseAttack = 10;
-    public int damage = 10; 
-    public float attackRange = 1.0f;
-    public float attackCooldown = 1.0f;
-    public float chaseRange = 10.0f;
-    public float moveSpeed = 3.0f;
-    public Transform player;
-    public Image healthBar;
-
-    private bool isAttacking = false;
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        enemyRigidbody = GetComponent<Rigidbody>();
         currentHealth = maxHealth;
-        player = GameObject.FindWithTag("Player").transform;
-
-        healthBar.type = Image.Type.Filled;
-        healthBar.fillMethod = Image.FillMethod.Horizontal;
-        healthBar.fillOrigin = (int)Image.OriginHorizontal.Right;
-        healthBar.color = Color.red;
     }
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= chaseRange)
-        {
-            transform.LookAt(player);
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-
-            if (!isAttacking)
-            {
-                StartCoroutine(Attack());
-            }
-        }
-    }
-
-    IEnumerator Attack()
-    {
-        isAttacking = true;
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= attackRange)
-        {
-            PlayerController playerController = player.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.TakeDamage(baseAttack + damage); 
-            }
-        }
-
-        yield return new WaitForSeconds(attackCooldown);
-        isAttacking = false;
+        Vector3 playerDirection = (player.position - transform.position).normalized;
+        enemyRigidbody.AddForce(playerDirection * moveSpeed);
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        healthBar.fillAmount *= damage / maxHealth;
         if (currentHealth <= 0)
         {
             Die();
